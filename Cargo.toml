@@ -5,12 +5,7 @@ edition = "2024"
 
 [dependencies]
 thiserror = "2.0"
-tokio = { version = "1.46", features = [
-    "time",
-    "rt",
-    "rt-multi-thread",
-    "macros",
-] }
+tokio = { version = "1.46", features = ["full"] }
 regex = "1.11"
 rand = "0.9"
 serde = { version = "1.0", features = ["derive"] }

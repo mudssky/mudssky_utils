@@ -38,7 +38,7 @@ fn split_words(s: &str) -> Vec<String> {
     let mut words = Vec::new();
     let mut current_word = String::new();
     let mut chars = s.chars().peekable();
-    
+
     while let Some(ch) = chars.next() {
         if ch.is_whitespace() || ch == '.' || ch == '-' || ch == '_' {
             if !current_word.is_empty() {
@@ -59,11 +59,11 @@ fn split_words(s: &str) -> Vec<String> {
             current_word.push(ch);
         }
     }
-    
+
     if !current_word.is_empty() {
         words.push(current_word);
     }
-    
+
     words
 }
 
@@ -89,20 +89,20 @@ pub enum StringError {
 pub fn gen_all_cases_combination(s: &str) -> Vec<String> {
     let mut result = Vec::new();
     let chars: Vec<char> = s.chars().collect();
-    
+
     fn dfs(chars: &[char], index: usize, current: &mut String, result: &mut Vec<String>) {
         if index == chars.len() {
             result.push(current.clone());
             return;
         }
-        
+
         let ch = chars[index];
         if ch.is_alphabetic() {
             // Try lowercase
             current.push(ch.to_lowercase().next().unwrap_or(ch));
             dfs(chars, index + 1, current, result);
             current.pop();
-            
+
             // Try uppercase
             current.push(ch.to_uppercase().next().unwrap_or(ch));
             dfs(chars, index + 1, current, result);
@@ -114,7 +114,7 @@ pub fn gen_all_cases_combination(s: &str) -> Vec<String> {
             current.pop();
         }
     }
-    
+
     let mut current = String::new();
     dfs(&chars, 0, &mut current, &mut result);
     result
@@ -133,15 +133,15 @@ pub fn gen_all_cases_combination(s: &str) -> Vec<String> {
 /// ```
 pub fn generate_uuid() -> String {
     use std::fmt::Write;
-    
+
     let mut uuid = String::with_capacity(36);
     let rng = || -> u8 { (rand::random::<f64>() * 16.0) as u8 };
-    
+
     for i in 0..32 {
         if i == 8 || i == 12 || i == 16 || i == 20 {
             uuid.push('-');
         }
-        
+
         let digit = if i == 12 {
             4 // Version 4
         } else if i == 16 {
@@ -149,10 +149,10 @@ pub fn generate_uuid() -> String {
         } else {
             rng()
         };
-        
+
         write!(&mut uuid, "{:x}", digit).unwrap();
     }
-    
+
     uuid
 }
 
@@ -182,13 +182,13 @@ pub fn generate_base62_code(len: usize) -> Result<String, StringError> {
             message: "Length must be greater than 0".to_string(),
         });
     }
-    
+
     let mut result = String::with_capacity(len);
     for _ in 0..len {
         let idx = (rand::random::<f64>() * 62.0) as usize;
         result.push(BASE62_CHARS[idx] as char);
     }
-    
+
     Ok(result)
 }
 
@@ -236,7 +236,7 @@ pub fn capitalize(s: &str) -> String {
     if s.is_empty() {
         return String::new();
     }
-    
+
     let mut chars = s.chars();
     match chars.next() {
         None => String::new(),
@@ -257,16 +257,16 @@ pub fn capitalize(s: &str) -> String {
 /// ```
 pub fn camel_case(s: &str) -> String {
     let parts = split_words(s);
-    
+
     if parts.is_empty() {
         return String::new();
     }
-    
+
     let mut result = parts[0].to_lowercase();
     for part in &parts[1..] {
         result.push_str(&capitalize(part));
     }
-    
+
     result
 }
 
@@ -283,11 +283,11 @@ pub fn camel_case(s: &str) -> String {
 /// ```
 pub fn snake_case(s: &str) -> String {
     let parts = split_words(s);
-    
+
     if parts.is_empty() {
         return String::new();
     }
-    
+
     parts.iter().map(|part| part.to_lowercase()).collect::<Vec<_>>().join("_")
 }
 
@@ -304,11 +304,11 @@ pub fn snake_case(s: &str) -> String {
 /// ```
 pub fn dash_case(s: &str) -> String {
     let parts = split_words(s);
-    
+
     if parts.is_empty() {
         return String::new();
     }
-    
+
     parts.iter().map(|part| part.to_lowercase()).collect::<Vec<_>>().join("-")
 }
 
@@ -324,7 +324,7 @@ pub fn dash_case(s: &str) -> String {
 /// ```
 pub fn pascal_case(s: &str) -> String {
     let parts = split_words(s);
-    
+
     parts.iter().map(|part| capitalize(part)).collect::<Vec<_>>().join("")
 }
 
@@ -346,7 +346,7 @@ pub fn pascal_case(s: &str) -> String {
 /// let mut data = HashMap::new();
 /// data.insert("name".to_string(), "World".to_string());
 /// data.insert("place".to_string(), "our app".to_string());
-/// 
+///
 /// let result = parse_template(template, &data, None);
 /// assert_eq!(result, "Hello World, welcome to our app!");
 /// ```
@@ -357,7 +357,7 @@ pub fn parse_template(
 ) -> String {
     let pattern = regex_pattern.unwrap_or(r"\{\{(.+?)\}\}");
     let re = Regex::new(pattern).unwrap();
-    
+
     let mut result = template.to_string();
     for caps in re.captures_iter(template) {
         let full_match = caps.get(0).unwrap().as_str();
@@ -457,12 +457,12 @@ pub fn generate_merge_paths(branches: &[String]) -> Vec<Vec<String>> {
     if branches.len() < 2 {
         return Vec::new();
     }
-    
+
     let mut paths = Vec::new();
     for i in 0..branches.len() - 1 {
         paths.push(vec![branches[i].clone(), branches[i + 1].clone()]);
     }
-    
+
     paths
 }
 
@@ -487,7 +487,7 @@ mod tests {
     fn test_generate_base62_code() {
         let code = generate_base62_code(6).unwrap();
         assert_eq!(code.len(), 6);
-        
+
         assert!(generate_base62_code(0).is_err());
     }
 
@@ -519,7 +519,7 @@ mod tests {
         let mut data = HashMap::new();
         data.insert("name".to_string(), "World".to_string());
         data.insert("place".to_string(), "our app".to_string());
-        
+
         let result = parse_template(template, &data, None);
         assert_eq!(result, "Hello World, welcome to our app!");
     }
@@ -542,9 +542,12 @@ mod tests {
     fn test_generate_merge_paths() {
         let branches = vec!["dev-xxx".to_string(), "dev".to_string(), "test".to_string()];
         let paths = generate_merge_paths(&branches);
-        assert_eq!(paths, vec![
-            vec!["dev-xxx".to_string(), "dev".to_string()],
-            vec!["dev".to_string(), "test".to_string()]
-        ]);
+        assert_eq!(
+            paths,
+            vec![
+                vec!["dev-xxx".to_string(), "dev".to_string()],
+                vec!["dev".to_string(), "test".to_string()]
+            ]
+        );
     }
 }

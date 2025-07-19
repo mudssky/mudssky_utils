@@ -7,13 +7,13 @@ use std::collections::HashMap;
 fn test_gen_all_cases_combination() {
     let result = gen_all_cases_combination("mb");
     assert_eq!(result, vec!["mb", "mB", "Mb", "MB"]);
-    
+
     let result = gen_all_cases_combination("a1b");
     assert!(result.contains(&"a1b".to_string()));
     assert!(result.contains(&"A1B".to_string()));
     assert!(result.contains(&"a1B".to_string()));
     assert!(result.contains(&"A1b".to_string()));
-    
+
     let result = gen_all_cases_combination("");
     assert_eq!(result, vec![""]);
 }
@@ -23,7 +23,7 @@ fn test_generate_uuid() {
     let uuid = generate_uuid();
     assert_eq!(uuid.len(), 36);
     assert!(uuid.contains('-'));
-    
+
     // Check format: xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
     let parts: Vec<&str> = uuid.split('-').collect();
     assert_eq!(parts.len(), 5);
@@ -32,10 +32,10 @@ fn test_generate_uuid() {
     assert_eq!(parts[2].len(), 4);
     assert_eq!(parts[3].len(), 4);
     assert_eq!(parts[4].len(), 12);
-    
+
     // Check version 4
     assert!(parts[2].starts_with('4'));
-    
+
     // Generate multiple UUIDs to ensure they're different
     let uuid2 = generate_uuid();
     assert_ne!(uuid, uuid2);
@@ -45,18 +45,18 @@ fn test_generate_uuid() {
 fn test_generate_base62_code() {
     let code = generate_base62_code(6).unwrap();
     assert_eq!(code.len(), 6);
-    
+
     // Check all characters are valid base62
     for ch in code.chars() {
         assert!(ch.is_ascii_alphanumeric());
     }
-    
+
     let code10 = generate_base62_code(10).unwrap();
     assert_eq!(code10.len(), 10);
-    
+
     // Test error case
     assert!(generate_base62_code(0).is_err());
-    
+
     // Generate multiple codes to ensure they're different
     let code2 = generate_base62_code(6).unwrap();
     assert_ne!(code, code2);
@@ -142,15 +142,15 @@ fn test_parse_template() {
     let mut data = HashMap::new();
     data.insert("name".to_string(), "World".to_string());
     data.insert("place".to_string(), "our app".to_string());
-    
+
     let result = parse_template(template, &data, None);
     assert_eq!(result, "Hello World, welcome to our app!");
-    
+
     // Test with missing key
     let template2 = "Hello {{name}}, welcome to {{missing}}!";
     let result2 = parse_template(template2, &data, None);
     assert_eq!(result2, "Hello World, welcome to {{missing}}!");
-    
+
     // Test with custom regex
     let template3 = "Hi <user>, your id is <id>.";
     let mut data3 = HashMap::new();
@@ -158,7 +158,7 @@ fn test_parse_template() {
     data3.insert("id".to_string(), "123".to_string());
     let result3 = parse_template(template3, &data3, Some(r"<(.+?)>"));
     assert_eq!(result3, "Hi Alex, your id is 123.");
-    
+
     // Test empty template
     let result4 = parse_template("", &data, None);
     assert_eq!(result4, "");
@@ -209,24 +209,35 @@ fn test_remove_prefix() {
 fn test_generate_merge_paths() {
     let branches = vec!["dev-xxx".to_string(), "dev".to_string(), "test".to_string()];
     let paths = generate_merge_paths(&branches);
-    assert_eq!(paths, vec![
-        vec!["dev-xxx".to_string(), "dev".to_string()],
-        vec!["dev".to_string(), "test".to_string()]
-    ]);
-    
-    let branches2 = vec!["feature".to_string(), "dev".to_string(), "test".to_string(), "prod".to_string()];
+    assert_eq!(
+        paths,
+        vec![
+            vec!["dev-xxx".to_string(), "dev".to_string()],
+            vec!["dev".to_string(), "test".to_string()]
+        ]
+    );
+
+    let branches2 = vec![
+        "feature".to_string(),
+        "dev".to_string(),
+        "test".to_string(),
+        "prod".to_string(),
+    ];
     let paths2 = generate_merge_paths(&branches2);
-    assert_eq!(paths2, vec![
-        vec!["feature".to_string(), "dev".to_string()],
-        vec!["dev".to_string(), "test".to_string()],
-        vec!["test".to_string(), "prod".to_string()]
-    ]);
-    
+    assert_eq!(
+        paths2,
+        vec![
+            vec!["feature".to_string(), "dev".to_string()],
+            vec!["dev".to_string(), "test".to_string()],
+            vec!["test".to_string(), "prod".to_string()]
+        ]
+    );
+
     // Test edge cases
     let empty_branches: Vec<String> = vec![];
     let empty_paths = generate_merge_paths(&empty_branches);
     assert_eq!(empty_paths, Vec::<Vec<String>>::new());
-    
+
     let single_branch = vec!["main".to_string()];
     let single_paths = generate_merge_paths(&single_branch);
     assert_eq!(single_paths, Vec::<Vec<String>>::new());
@@ -238,7 +249,7 @@ fn test_string_error() {
         message: "Test error".to_string(),
     };
     assert_eq!(error.to_string(), "Invalid input: Test error");
-    
+
     let regex_error = StringError::RegexError {
         message: "Invalid regex".to_string(),
     };

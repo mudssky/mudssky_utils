@@ -54,7 +54,7 @@ pub fn range(start: i32, end: Option<i32>, step: Option<i32>) -> Result<Vec<i32>
     };
 
     let mut result = Vec::new();
-    
+
     if step > 0 {
         let mut i = actual_start;
         while i < actual_end {
@@ -97,9 +97,7 @@ pub fn chunk<T: Clone>(list: &[T], size: usize) -> Vec<Vec<T>> {
         return vec![];
     }
 
-    list.chunks(size)
-        .map(|chunk| chunk.to_vec())
-        .collect()
+    list.chunks(size).map(|chunk| chunk.to_vec()).collect()
 }
 
 /// Gets the first element of a slice, or returns the default value.
@@ -167,7 +165,7 @@ pub fn last<'a, T>(array: &'a [T], default: &'a T) -> &'a T {
 ///
 /// let words = vec!["apple", "banana", "apricot", "blueberry"];
 /// let counts = count_by(&words, |s| s.chars().next().unwrap());
-/// 
+///
 /// let mut expected = HashMap::new();
 /// expected.insert('a', 2);
 /// expected.insert('b', 2);
@@ -248,7 +246,7 @@ where
 {
     let mut true_items = Vec::new();
     let mut false_items = Vec::new();
-    
+
     for item in list {
         if condition(item) {
             true_items.push(item.clone());
@@ -256,7 +254,7 @@ where
             false_items.push(item.clone());
         }
     }
-    
+
     (true_items, false_items)
 }
 
@@ -278,7 +276,7 @@ where
 ///
 /// assert_eq!(max(&[1, 3, 2], None::<fn(&i32) -> i32>), Some(&3));
 /// assert_eq!(max::<i32, i32, fn(&i32) -> i32>(&[], None), None);
-/// 
+///
 /// let people = vec![("Alice", 25), ("Bob", 30), ("Charlie", 20)];
 /// assert_eq!(max(&people, Some(|p: &(&str, i32)| p.1)), Some(&("Bob", 30)));
 /// ```
@@ -291,11 +289,9 @@ where
     if array.is_empty() {
         return None;
     }
-    
+
     match getter {
-        Some(get_fn) => {
-            array.iter().max_by(|a, b| get_fn(a).cmp(&get_fn(b)))
-        }
+        Some(get_fn) => array.iter().max_by(|a, b| get_fn(a).cmp(&get_fn(b))),
         None => array.iter().max(),
     }
 }
@@ -318,7 +314,7 @@ where
 ///
 /// assert_eq!(min(&[1, 3, 2], None::<fn(&i32) -> i32>), Some(&1));
 /// assert_eq!(min::<i32, i32, fn(&i32) -> i32>(&[], None), None);
-/// 
+///
 /// let people = vec![("Alice", 25), ("Bob", 30), ("Charlie", 20)];
 /// assert_eq!(min(&people, Some(|p: &(&str, i32)| p.1)), Some(&("Charlie", 20)));
 /// ```
@@ -331,11 +327,9 @@ where
     if array.is_empty() {
         return None;
     }
-    
+
     match getter {
-        Some(get_fn) => {
-            array.iter().min_by(|a, b| get_fn(a).cmp(&get_fn(b)))
-        }
+        Some(get_fn) => array.iter().min_by(|a, b| get_fn(a).cmp(&get_fn(b))),
         None => array.iter().min(),
     }
 }
@@ -355,10 +349,10 @@ where
 ///
 /// ```
 /// use mudssky_utils::array::sum;
-/// 
+///
 /// let items = vec![("a", 1), ("b", 2), ("c", 3)];
 /// assert_eq!(sum(&items, |item| item.1), 6);
-/// 
+///
 /// let numbers = vec![1, 2, 3, 4];
 /// assert_eq!(sum(&numbers, |&x| x), 10);
 /// ```
@@ -412,7 +406,7 @@ where
 /// use mudssky_utils::array::unique;
 ///
 /// assert_eq!(unique(&[1, 2, 2, 3, 1], Some(|&x: &i32| x)), vec![1, 2, 3]);
-/// 
+///
 /// let people = vec![("Alice", 25), ("Bob", 30), ("Alice", 35)];
 /// let unique_ages = unique(&people, Some(|p: &(&str, i32)| p.1));
 /// assert_eq!(unique_ages.len(), 3);
@@ -425,7 +419,7 @@ where
 {
     let mut seen = std::collections::HashSet::new();
     let mut result = Vec::new();
-    
+
     for item in array {
         match &key_fn {
             Some(f) => {
@@ -441,7 +435,7 @@ where
             }
         };
     }
-    
+
     result
 }
 
@@ -468,16 +462,20 @@ where
 pub fn shuffle<T: Clone>(array: &[T]) -> Vec<T> {
     use std::collections::hash_map::DefaultHasher;
     use std::hash::{Hash, Hasher};
-    
-    let mut items: Vec<_> = array.iter().enumerate().map(|(i, item)| {
-        let mut hasher = DefaultHasher::new();
-        i.hash(&mut hasher);
-        // Add some randomness based on memory address
-        let addr = item as *const T as usize;
-        addr.hash(&mut hasher);
-        (hasher.finish(), item.clone())
-    }).collect();
-    
+
+    let mut items: Vec<_> = array
+        .iter()
+        .enumerate()
+        .map(|(i, item)| {
+            let mut hasher = DefaultHasher::new();
+            i.hash(&mut hasher);
+            // Add some randomness based on memory address
+            let addr = item as *const T as usize;
+            addr.hash(&mut hasher);
+            (hasher.finish(), item.clone())
+        })
+        .collect();
+
     items.sort_by_key(|&(hash, _)| hash);
     items.into_iter().map(|(_, item)| item).collect()
 }

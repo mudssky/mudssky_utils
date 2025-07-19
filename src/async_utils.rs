@@ -53,7 +53,7 @@ mod tests {
         let start = Instant::now();
         sleep_async(0).await;
         let elapsed = start.elapsed();
-        
+
         // Should complete very quickly (within 50ms to account for system overhead)
         assert!(elapsed <= Duration::from_millis(50));
     }

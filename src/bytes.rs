@@ -104,16 +104,20 @@ impl Bytes {
     /// use mudssky_utils::bytes::{Bytes, BytesOptions};
     ///
     /// let bytes = Bytes::new();
-    /// 
+    ///
     /// // Format number to string
     /// let result = bytes.convert_number(1024, None).unwrap();
     /// assert_eq!(result, "1KB");
-    /// 
+    ///
     /// // Parse string to number
     /// let result = bytes.convert_string("1KB").unwrap();
     /// assert_eq!(result, 1024);
     /// ```
-    pub fn convert_number(&self, value: u64, options: Option<BytesOptions>) -> Result<String, BytesError> {
+    pub fn convert_number(
+        &self,
+        value: u64,
+        options: Option<BytesOptions>,
+    ) -> Result<String, BytesError> {
         self.format(value, options)
     }
 
@@ -136,11 +140,13 @@ impl Bytes {
     /// ```
     pub fn parse(&self, val: &str) -> Result<u64, BytesError> {
         let val = val.trim();
-        
+
         // Try to parse as plain number first
         if let Ok(num) = val.parse::<f64>() {
             if num < 0.0 {
-                return Err(BytesError::ParseError("Negative values not allowed".to_string()));
+                return Err(BytesError::ParseError(
+                    "Negative values not allowed".to_string(),
+                ));
             }
             return Ok(num.floor() as u64);
         }
@@ -153,11 +159,14 @@ impl Bytes {
             let number_str = captures.get(1).unwrap().as_str();
             let unit_str = captures.get(2).map(|m| m.as_str()).unwrap_or("b");
 
-            let float_value: f64 = number_str.parse()
+            let float_value: f64 = number_str
+                .parse()
                 .map_err(|_| BytesError::ParseError(format!("Invalid number: {}", number_str)))?;
 
             if float_value < 0.0 {
-                return Err(BytesError::ParseError("Negative values not allowed".to_string()));
+                return Err(BytesError::ParseError(
+                    "Negative values not allowed".to_string(),
+                ));
             }
 
             let unit = ByteUnit::from_str(unit_str)?;
@@ -177,11 +186,11 @@ impl Bytes {
     /// use mudssky_utils::bytes::{Bytes, BytesOptions, ByteUnit};
     ///
     /// let bytes = Bytes::new();
-    /// 
+    ///
     /// // Auto unit selection
     /// assert_eq!(bytes.format(1024, None).unwrap(), "1KB");
     /// assert_eq!(bytes.format(1536, None).unwrap(), "1.5KB");
-    /// 
+    ///
     /// // Custom options
     /// let mut options = BytesOptions::default();
     /// options.unit = Some(ByteUnit::MB);
@@ -226,18 +235,27 @@ impl Bytes {
             num_str = self.add_thousands_separator(&num_str, &options.thousands_separator);
         }
 
-        Ok(format!("{}{}{}", num_str, options.unit_separator, unit.to_string()))
+        Ok(format!(
+            "{}{}{}",
+            num_str,
+            options.unit_separator,
+            unit.to_string()
+        ))
     }
 
     /// Add thousands separator to a number string
     fn add_thousands_separator(&self, num_str: &str, separator: &str) -> String {
         let parts: Vec<&str> = num_str.split('.').collect();
         let integer_part = parts[0];
-        let decimal_part = if parts.len() > 1 { Some(parts[1]) } else { None };
+        let decimal_part = if parts.len() > 1 {
+            Some(parts[1])
+        } else {
+            None
+        };
 
         let mut result = String::new();
         let chars: Vec<char> = integer_part.chars().rev().collect();
-        
+
         for (i, ch) in chars.iter().enumerate() {
             if i > 0 && i % 3 == 0 {
                 result.push_str(separator);
@@ -246,7 +264,7 @@ impl Bytes {
         }
 
         let integer_result: String = result.chars().rev().collect();
-        
+
         if let Some(decimal) = decimal_part {
             format!("{}.{}", integer_result, decimal)
         } else {

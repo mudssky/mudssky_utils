@@ -12,6 +12,7 @@ module.exports = {
     // 2. 对于 `cargo clippy`，我们返回固定的命令，它会检查整个项目。
     //    `lint-staged` 会确保这个命令只运行一次。
     //    我们在这里完全忽略了传入的 `filenames` 参数。
-    return [formatCommand, CLippyCommand];
+    // return [formatCommand, CLippyCommand];
+    return [formatCommand];
   },
 };

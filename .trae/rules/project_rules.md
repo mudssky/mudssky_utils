@@ -60,23 +60,19 @@
 Rust 的模块系统有其独特的组织方式，我们遵循官方推荐的结构：
 
 ```
-.
-├── .github/          # CI/CD 工作流 (例如：GitHub Actions)
-├── src/              # 源代码目录
-│   ├── lib.rs        # 库的根文件和主入口，负责声明所有公共模块
-│   ├── array.rs      # 数组/Vec 相关工具模块
-│   ├── string.rs     # 字符串相关工具模块
-│   ├── fs.rs         # 文件系统相关工具模块
-│   ├── types.rs      # 公用的类型定义 (如果需要跨模块共享)
-│   └── ...           # 其他功能模块
-├── tests/            # 集成测试目录
-│   ├── array_tests.rs
-│   └── string_tests.rs
-├── examples/         # 使用示例目录
-│   └── simple_usage.rs
-├── Cargo.toml        # 项目清单文件 (元数据、依赖等)
-├── README.md         # 项目说明
-└── .rustfmt.toml     # 格式化配置
+mudssky_utils/
+├── src/
+│   ├── lib.rs           # 库入口
+│   ├── string.rs        # 字符串工具
+│   ├── array.rs         # 数组工具
+│   ├── object.rs        # 对象工具
+│   ├── math.rs          # 数学工具
+│   ├── bytes.rs         # 字节转换
+│   ├── async_utils.rs   # 异步工具
+│   └── function.rs      # 函数式工具
+├── tests/               # 集成测试
+├── Cargo.toml          # 项目配置
+└── README.md           # 项目文档
 ```
 
 ### 开发流程

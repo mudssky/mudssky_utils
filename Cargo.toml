@@ -2,6 +2,21 @@
 name = "mudssky_utils"
 version = "0.1.0"
 edition = "2024"
+authors = ["mudssky <mudssky@gmail.com>"]
+description = "A comprehensive Rust utility library providing common functionality for everyday programming tasks"
+license = "MIT"
+repository = "https://github.com/mudssky/mudssky_utils"
+homepage = "https://github.com/mudssky/mudssky_utils"
+documentation = "https://docs.rs/mudssky_utils"
+readme = "README.md"
+keywords = ["utilities", "tools", "helpers", "lodash", "functional"]
+categories = [
+    "development-tools",
+    "algorithms",
+    "data-structures",
+    "text-processing",
+]
+rust-version = "1.70.0"
 
 [dependencies]
 thiserror = "2.0"
@@ -10,3 +25,7 @@ regex = "1.11"
 rand = "0.9"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+once_cell = "1.20"
+num_cpus = "1.16"
+dirs = "6.0"
+chrono = { version = "0.4", features = ["serde"] }

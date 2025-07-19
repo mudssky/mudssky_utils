@@ -21,8 +21,8 @@ fn test_range() {
     assert_eq!(range(0, Some(10), Some(0)), Err(ArrayError::ZeroStep));
 
     // Test empty range
-    assert_eq!(range(5, Some(5), None).unwrap(), vec![]);
-    assert_eq!(range(0, Some(0), None).unwrap(), vec![]);
+    assert_eq!(range(5, Some(5), None).unwrap(), Vec::<i32>::new());
+    assert_eq!(range(0, Some(0), None).unwrap(), Vec::<i32>::new());
 }
 
 #[test]

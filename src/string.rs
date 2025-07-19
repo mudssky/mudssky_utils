@@ -150,7 +150,7 @@ pub fn generate_uuid() -> String {
             rng()
         };
 
-        write!(&mut uuid, "{:x}", digit).unwrap();
+        write!(&mut uuid, "{digit:x}").unwrap();
     }
 
     uuid
@@ -432,8 +432,8 @@ pub fn trim_end(s: &str, chars_to_trim: Option<&str>) -> String {
 /// assert_eq!(remove_prefix("test", "no"), "test");
 /// ```
 pub fn remove_prefix(s: &str, prefix: &str) -> String {
-    if s.starts_with(prefix) {
-        s[prefix.len()..].to_string()
+    if let Some(stripped) = s.strip_prefix(prefix) {
+        stripped.to_string()
     } else {
         s.to_string()
     }

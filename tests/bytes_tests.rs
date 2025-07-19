@@ -1,4 +1,5 @@
 use mudssky_utils::bytes::*;
+use std::str::FromStr;
 
 #[test]
 fn test_bytes_parse_basic() {

@@ -2,6 +2,8 @@
 //!
 //! This module provides utilities for byte unit conversion and formatting.
 
+use std::fmt;
+use std::str::FromStr;
 use thiserror::Error;
 
 /// Error types for bytes operations
@@ -26,21 +28,23 @@ pub enum ByteUnit {
     PB,
 }
 
-impl ByteUnit {
-    /// Get the multiplier for this unit
-    pub fn multiplier(&self) -> u64 {
+impl fmt::Display for ByteUnit {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            ByteUnit::B => 1,
-            ByteUnit::KB => 1 << 10,
-            ByteUnit::MB => 1 << 20,
-            ByteUnit::GB => 1 << 30,
-            ByteUnit::TB => 1u64 << 40,
-            ByteUnit::PB => 1u64 << 50,
+            ByteUnit::B => write!(f, "B"),
+            ByteUnit::KB => write!(f, "KB"),
+            ByteUnit::MB => write!(f, "MB"),
+            ByteUnit::GB => write!(f, "GB"),
+            ByteUnit::TB => write!(f, "TB"),
+            ByteUnit::PB => write!(f, "PB"),
         }
     }
+}
 
-    /// Parse unit from string
-    pub fn from_str(s: &str) -> Result<Self, BytesError> {
+impl FromStr for ByteUnit {
+    type Err = BytesError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
             "b" => Ok(ByteUnit::B),
             "kb" => Ok(ByteUnit::KB),
@@ -51,16 +55,18 @@ impl ByteUnit {
             _ => Err(BytesError::InvalidUnit(s.to_string())),
         }
     }
+}
 
-    /// Convert to string
-    pub fn to_string(&self) -> String {
+impl ByteUnit {
+    /// Get the multiplier for this unit
+    pub fn multiplier(&self) -> u64 {
         match self {
-            ByteUnit::B => "B".to_string(),
-            ByteUnit::KB => "KB".to_string(),
-            ByteUnit::MB => "MB".to_string(),
-            ByteUnit::GB => "GB".to_string(),
-            ByteUnit::TB => "TB".to_string(),
-            ByteUnit::PB => "PB".to_string(),
+            ByteUnit::B => 1,
+            ByteUnit::KB => 1 << 10,
+            ByteUnit::MB => 1 << 20,
+            ByteUnit::GB => 1 << 30,
+            ByteUnit::TB => 1u64 << 40,
+            ByteUnit::PB => 1u64 << 50,
         }
     }
 }
@@ -153,7 +159,7 @@ impl Bytes {
 
         // Use regex-like parsing
         let re = regex::Regex::new(r"^([-+]?\d+(?:\.\d+)?)\s*(b|kb|mb|gb|tb|pb)?$")
-            .map_err(|e| BytesError::ParseError(format!("Regex error: {}", e)))?;
+            .map_err(|e| BytesError::ParseError(format!("Regex error: {e}")))?;
 
         if let Some(captures) = re.captures(&val.to_lowercase()) {
             let number_str = captures.get(1).unwrap().as_str();
@@ -161,7 +167,7 @@ impl Bytes {
 
             let float_value: f64 = number_str
                 .parse()
-                .map_err(|_| BytesError::ParseError(format!("Invalid number: {}", number_str)))?;
+                .map_err(|_| BytesError::ParseError(format!("Invalid number: {number_str}")))?;
 
             if float_value < 0.0 {
                 return Err(BytesError::ParseError(
@@ -169,12 +175,12 @@ impl Bytes {
                 ));
             }
 
-            let unit = ByteUnit::from_str(unit_str)?;
+            let unit: ByteUnit = unit_str.parse()?;
             let multiplier = unit.multiplier();
 
             Ok((float_value * multiplier as f64).floor() as u64)
         } else {
-            Err(BytesError::ParseError(format!("Invalid format: {}", val)))
+            Err(BytesError::ParseError(format!("Invalid format: {val}")))
         }
     }
 
@@ -235,12 +241,7 @@ impl Bytes {
             num_str = self.add_thousands_separator(&num_str, &options.thousands_separator);
         }
 
-        Ok(format!(
-            "{}{}{}",
-            num_str,
-            options.unit_separator,
-            unit.to_string()
-        ))
+        Ok(format!("{}{}{}", num_str, options.unit_separator, unit))
     }
 
     /// Add thousands separator to a number string
@@ -266,7 +267,7 @@ impl Bytes {
         let integer_result: String = result.chars().rev().collect();
 
         if let Some(decimal) = decimal_part {
-            format!("{}.{}", integer_result, decimal)
+            format!("{integer_result}.{decimal}")
         } else {
             integer_result
         }
@@ -283,7 +284,7 @@ impl Default for Bytes {
 static BYTES_INSTANCE: std::sync::OnceLock<Bytes> = std::sync::OnceLock::new();
 
 fn get_bytes_instance() -> &'static Bytes {
-    BYTES_INSTANCE.get_or_init(|| Bytes::new())
+    BYTES_INSTANCE.get_or_init(Bytes::new)
 }
 
 /// Convenience function for byte conversion

@@ -342,8 +342,7 @@ pub fn remove_non_serializable_props(obj: &Value) -> Value {
             Value::Object(result)
         }
         Value::Array(arr) => {
-            let cleaned_array: Vec<Value> =
-                arr.iter().map(|item| remove_non_serializable_props(item)).collect();
+            let cleaned_array: Vec<Value> = arr.iter().map(remove_non_serializable_props).collect();
             Value::Array(cleaned_array)
         }
         _ => obj.clone(),

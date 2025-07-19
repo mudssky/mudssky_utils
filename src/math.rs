@@ -3,7 +3,7 @@
 //! This module provides mathematical utility functions including random number generation
 //! and array manipulation functions.
 
-use rand::Rng;
+use rand::{Rng, rng};
 use thiserror::Error;
 
 /// Errors that can occur during math operations
@@ -42,7 +42,7 @@ pub fn random_int(start: i32, end: i32) -> Result<i32, MathError> {
         });
     }
 
-    let mut rng = rand::rng();
+    let mut rng = rng();
     Ok(rng.random_range(start..end))
 }
 
@@ -100,7 +100,7 @@ pub fn get_random_item_from_array<T: Clone>(arr: &[T]) -> Result<T, MathError> {
         });
     }
 
-    let mut rng = rand::rng();
+    let mut rng = rng();
     let index = rng.random_range(0..arr.len());
     Ok(arr[index].clone())
 }

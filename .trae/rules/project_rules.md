@@ -27,7 +27,7 @@
    - **函数、变量、模块名**: snake_case，例如 fn trim_lines()。
 4. **API 设计**:
    - **公开性**: 只有明确希望被外部使用的函数、结构体等才应标记为 pub。
-   - **错误处理**: 可失败的函数**必须**返回 `Result<T, E>`，而不是 `panic!`。为特定模块定义清晰的错误类型（Error Enum）。
+   - **错误处理**: 可失败的函数**必须**返回 `Result<T, E>`，而不是 `panic!`。为特定模块定义清晰的错误类型（Error Enum）,使用thiserror库定义错误类型
    - **安全性**: 除非绝对必要且有充分理由，否则**严禁**使用 unsafe 代码。任何 unsafe 代码块都必须有详细的注释，解释其为何是安全的。
 
 ## 提交规范
@@ -46,12 +46,12 @@
 
 项目使用自动化工具进行版本管理和发布。
 
-* **发布分支**: `main`
-* **推荐工具**: `cargo-release`
-  * 该工具可以自动完成版本号更新、创建 Git Tag、推送和发布到 `crates.io` 的流程。
-  * 运行 `cargo release <level>` (其中 `level` 是 `patch`, `minor`, `major`) 即可触发。
-* **CI/CD 发布**:
-  * 在 GitHub Actions 中，我们使用 **Trusted Publishing (OIDC)** 来安全地发布到 `crates.io`，避免在 Secrets 中存储长期的 API 令牌。
+- **发布分支**: `main`
+- **推荐工具**: `cargo-release`
+  - 该工具可以自动完成版本号更新、创建 Git Tag、推送和发布到 `crates.io` 的流程。
+  - 运行 `cargo release <level>` (其中 `level` 是 `patch`, `minor`, `major`) 即可触发。
+- **CI/CD 发布**:
+  - 在 GitHub Actions 中，我们使用 **Trusted Publishing (OIDC)** 来安全地发布到 `crates.io`，避免在 Secrets 中存储长期的 API 令牌。
 
 ## 开发指南
 
@@ -82,19 +82,19 @@ Rust 的模块系统有其独特的组织方式，我们遵循官方推荐的结
 ### 开发流程
 
 1. **构建与检查**:
-    * `cargo check`: 快速检查代码，不生成可执行文件，速度快。
-    * `cargo build`: 编译项目。
-    * `cargo build --release`: 进行优化编译，用于发布。
+    - `cargo check`: 快速检查代码，不生成可执行文件，速度快。
+    - `cargo build`: 编译项目。
+    - `cargo build --release`: 进行优化编译，用于发布。
 2. **运行示例**: `cargo run --example <example_name>`
 
 ### 测试
 
 1. **集成测试 (Integration Tests)**
-    * 位于根目录下的 `tests/` 目录中。每个 `.rs` 文件都是一个独立的测试 Crate。
-    * 用于测试库的公共 API，模拟真实用户的使用方式。
+    - 位于根目录下的 `tests/` 目录中。每个 `.rs` 文件都是一个独立的测试 Crate。
+    - 用于测试库的公共 API，模拟真实用户的使用方式。
 
 2. **文档测试 (Doc Tests)**
-    * 直接写在文档注释（`///`）中的代码示例会自动作为测试运行。这是保证文档与代码同步的最佳方式。
+    - 直接写在文档注释（`///`）中的代码示例会自动作为测试运行。这是保证文档与代码同步的最佳方式。
 
 **运行所有测试:**
 
@@ -104,6 +104,6 @@ cargo test
 
 ## 文档
 
-* **API 文档**: 项目的公共 API 文档通过代码中的**文档注释 (`///`)** 自动生成。
-* **生成文档**: 运行 `cargo doc --open` 会在本地构建 HTML 文档并在浏览器中打开。
-* **项目指南**: 对于更详细的指南和说明（类似 VitePress 的效果），我们可以使用 `mdbook` 来创建一本单独的书籍。
+- **API 文档**: 项目的公共 API 文档通过代码中的**文档注释 (`///`)** 自动生成。
+- **生成文档**: 运行 `cargo doc --open` 会在本地构建 HTML 文档并在浏览器中打开。
+- **项目指南**: 对于更详细的指南和说明（类似 VitePress 的效果），我们可以使用 `mdbook` 来创建一本单独的书籍。

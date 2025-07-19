@@ -88,10 +88,12 @@ fn test_bytes_format_small_values() {
 fn test_bytes_format_with_options() {
     let bytes = Bytes::new();
 
-    let mut options = BytesOptions::default();
-    options.unit = Some(ByteUnit::MB);
-    options.decimal_places = 3;
-    options.fixed_decimals = true;
+    let options = BytesOptions {
+        unit: Some(ByteUnit::MB),
+        decimal_places: 3,
+        fixed_decimals: true,
+        ..Default::default()
+    };
 
     assert_eq!(bytes.format(1048576, Some(options)).unwrap(), "1.000MB");
 }
@@ -100,8 +102,10 @@ fn test_bytes_format_with_options() {
 fn test_bytes_format_with_unit_separator() {
     let bytes = Bytes::new();
 
-    let mut options = BytesOptions::default();
-    options.unit_separator = " ".to_string();
+    let options = BytesOptions {
+        unit_separator: " ".to_string(),
+        ..Default::default()
+    };
 
     assert_eq!(bytes.format(1024, Some(options)).unwrap(), "1 KB");
 }
@@ -110,9 +114,11 @@ fn test_bytes_format_with_unit_separator() {
 fn test_bytes_format_with_thousands_separator() {
     let bytes = Bytes::new();
 
-    let mut options = BytesOptions::default();
-    options.thousands_separator = ",".to_string();
-    options.unit = Some(ByteUnit::B);
+    let options = BytesOptions {
+        thousands_separator: ",".to_string(),
+        unit: Some(ByteUnit::B),
+        ..Default::default()
+    };
 
     assert_eq!(bytes.format(1234567, Some(options)).unwrap(), "1,234,567B");
 }
@@ -180,6 +186,6 @@ fn test_round_trip_conversion() {
     for value in test_values {
         let formatted = bytes_instance.format(value, None).unwrap();
         let parsed = bytes_instance.parse(&formatted).unwrap();
-        assert_eq!(parsed, value, "Round trip failed for value: {}", value);
+        assert_eq!(parsed, value, "Round trip failed for value: {value}");
     }
 }

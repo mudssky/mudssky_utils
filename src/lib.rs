@@ -1,7 +1,12 @@
 pub mod array;
 pub mod async_utils;
 pub mod bytes;
+pub mod env;
+pub mod error;
 pub mod function;
+pub mod lang;
+pub mod logger;
 pub mod math;
 pub mod object;
+pub mod regex;
 pub mod string;

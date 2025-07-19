@@ -7,9 +7,8 @@ fn test_random_int_range() {
         assert!(result.is_ok());
         let num = result.unwrap();
         assert!(
-            num >= 10 && num < 20,
-            "Generated number {} is not in range [10, 20)",
-            num
+            (10..20).contains(&num),
+            "Generated number {num} is not in range [10, 20)"
         );
     }
 }
@@ -21,9 +20,8 @@ fn test_random_int_negative_range() {
         assert!(result.is_ok());
         let num = result.unwrap();
         assert!(
-            num >= -10 && num < 10,
-            "Generated number {} is not in range [-10, 10)",
-            num
+            (-10..10).contains(&num),
+            "Generated number {num} is not in range [-10, 10)"
         );
     }
 }
@@ -44,9 +42,8 @@ fn test_random_int_max() {
         assert!(result.is_ok());
         let num = result.unwrap();
         assert!(
-            num >= 0 && num < 50,
-            "Generated number {} is not in range [0, 50)",
-            num
+            (0..50).contains(&num),
+            "Generated number {num} is not in range [0, 50)"
         );
     }
 }
@@ -68,7 +65,7 @@ fn test_get_random_item_from_array() {
         let result = get_random_item_from_array(&arr);
         assert!(result.is_ok());
         let item = result.unwrap();
-        assert!(arr.contains(&item), "Item {} not found in array", item);
+        assert!(arr.contains(&item), "Item {item} not found in array");
     }
 }
 
@@ -95,7 +92,7 @@ fn test_get_random_item_with_different_types() {
     assert!(result.is_ok());
 
     // Test with numbers
-    let num_arr = vec![1.5, 2.7, 3.14];
+    let num_arr = vec![1.5, 2.7, std::f64::consts::PI];
     let result = get_random_item_from_array(&num_arr);
     assert!(result.is_ok());
     assert!(num_arr.contains(&result.unwrap()));

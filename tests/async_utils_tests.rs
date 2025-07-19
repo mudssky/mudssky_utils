@@ -1,6 +1,5 @@
 use mudssky_utils::async_utils::*;
 use std::time::{Duration, Instant};
-use tokio;
 
 #[tokio::test]
 async fn test_sleep_async_basic() {

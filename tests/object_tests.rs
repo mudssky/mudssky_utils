@@ -210,5 +210,5 @@ fn test_object_error_display() {
     let error = ObjectError::SerializationError {
         message: "test error".to_string(),
     };
-    assert_eq!(format!("{}", error), "Serialization error: test error");
+    assert_eq!(format!("{error}"), "Serialization error: test error");
 }

@@ -31,30 +31,3 @@ use tokio::time::sleep;
 pub async fn sleep_async(ms: u64) {
     sleep(Duration::from_millis(ms)).await;
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::time::Instant;
-
-    #[tokio::test]
-    async fn test_sleep_async() {
-        let start = Instant::now();
-        sleep_async(100).await;
-        let elapsed = start.elapsed();
-
-        // Allow some tolerance for timing
-        assert!(elapsed >= Duration::from_millis(90));
-        assert!(elapsed <= Duration::from_millis(150));
-    }
-
-    #[tokio::test]
-    async fn test_sleep_async_zero() {
-        let start = Instant::now();
-        sleep_async(0).await;
-        let elapsed = start.elapsed();
-
-        // Should complete very quickly (within 50ms to account for system overhead)
-        assert!(elapsed <= Duration::from_millis(50));
-    }
-}

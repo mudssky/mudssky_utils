@@ -81,11 +81,9 @@ Rust 的模块系统有其独特的组织方式，我们遵循官方推荐的结
 
 ### 开发流程
 
-1. **构建与检查**:
-    - `cargo check`: 快速检查代码，不生成可执行文件，速度快。
-    - `cargo build`: 编译项目。
-    - `cargo build --release`: 进行优化编译，用于发布。
-2. **运行示例**: `cargo run --example <example_name>`
+1. 开发方法，编写方法文档，包含文档测试
+2. 在tests/，目录下编写集成测试，运行集成测试通过
+3. 执行`cargo clippy -- -D warnings`，修复遇到的问题
 
 ### 测试
 

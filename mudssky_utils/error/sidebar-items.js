@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["UtilsError"],"fn":["argument_error","config_error","network_error","parse_error","validation_error"],"struct":["ArgumentError","ConfigError","NetworkError","ParseError","ValidationError"],"type":["UtilsResult"]};

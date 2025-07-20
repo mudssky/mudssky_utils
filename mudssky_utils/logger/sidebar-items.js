@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["LogLevel"],"fn":["create_logger","get_logger","set_global_level"],"struct":["ConsoleOutput","JsonFormatter","LogEntry","Logger","LoggerConfig","SimpleFormatter"],"trait":["LogFormatter","LogOutput"]};

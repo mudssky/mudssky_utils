@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["NumberUtilsError"],"fn":["clamp","is_finite","is_integer","is_nan","is_safe_integer","lerp","map_range","max_safe_integer","min_safe_integer","negative_infinity","parse_float","parse_int","positive_infinity","to_exponential","to_fixed","to_precision"]};

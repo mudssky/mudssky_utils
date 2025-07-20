@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ArrayError"],"fn":["chunk","concat","count_by","diff","every","filter","find","find_index","first","flat","fork","includes","index_of","join","last","map","max","min","range","reduce","reverse","shuffle","slice","some","sum","sum_direct","unique"]};

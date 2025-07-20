@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_type_name","is_alphabetic","is_alphanumeric","is_empty","is_empty_hashmap","is_empty_hashset","is_empty_string","is_empty_vec","is_equal","is_identifier","is_none","is_numeric","is_some","is_zero_f64","is_zero_i32"]};

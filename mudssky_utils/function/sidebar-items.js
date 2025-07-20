@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FunctionError"],"fn":["with_retry"],"struct":["DebounceOptions","Debouncer","Poller","PollingOptions","PollingStatus","RetryOptions","ThrottleOptions","Throttler"]};

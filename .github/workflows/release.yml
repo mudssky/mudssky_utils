@@ -43,7 +43,7 @@ jobs:
         node-version: '22'
         cache: 'pnpm'
     - name: install deps
-      run: pnpm ci
+      run: pnpm i --frozen-lockfile
     - name: Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

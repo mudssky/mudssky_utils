@@ -7,6 +7,8 @@ pub mod function;
 pub mod lang;
 pub mod logger;
 pub mod math;
+pub mod number_utils;
 pub mod object;
+pub mod object_utils;
 pub mod regex;
 pub mod string;

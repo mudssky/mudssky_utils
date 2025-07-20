@@ -465,3 +465,194 @@ pub fn generate_merge_paths(branches: &[String]) -> Vec<Vec<String>> {
 
     paths
 }
+
+/// Pad string to the left with specified character to reach target length
+/// Similar to JavaScript's String.prototype.padStart()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::pad_start;
+///
+/// assert_eq!(pad_start("5", 3, Some("0")), "005");
+/// assert_eq!(pad_start("hello", 8, Some(" ")), "   hello");
+/// assert_eq!(pad_start("world", 3, None), "world"); // no padding needed
+/// ```
+pub fn pad_start(s: &str, target_length: usize, pad_string: Option<&str>) -> String {
+    if s.len() >= target_length {
+        return s.to_string();
+    }
+
+    let pad_char = pad_string.unwrap_or(" ");
+    let pad_length = target_length - s.len();
+    let padding = pad_char.repeat(pad_length / pad_char.len() + 1);
+    let trimmed_padding = &padding[..pad_length];
+
+    format!("{trimmed_padding}{s}")
+}
+
+/// Pad string to the right with specified character to reach target length
+/// Similar to JavaScript's String.prototype.padEnd()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::pad_end;
+///
+/// assert_eq!(pad_end("5", 3, Some("0")), "500");
+/// assert_eq!(pad_end("hello", 8, Some(" ")), "hello   ");
+/// assert_eq!(pad_end("world", 3, None), "world"); // no padding needed
+/// ```
+pub fn pad_end(s: &str, target_length: usize, pad_string: Option<&str>) -> String {
+    if s.len() >= target_length {
+        return s.to_string();
+    }
+
+    let pad_char = pad_string.unwrap_or(" ");
+    let pad_length = target_length - s.len();
+    let padding = pad_char.repeat(pad_length / pad_char.len() + 1);
+    let trimmed_padding = &padding[..pad_length];
+
+    format!("{s}{trimmed_padding}")
+}
+
+/// Repeat string n times
+/// Similar to JavaScript's String.prototype.repeat()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::repeat;
+///
+/// assert_eq!(repeat("abc", 3), "abcabcabc");
+/// assert_eq!(repeat("x", 0), "");
+/// assert_eq!(repeat("hello", 2), "hellohello");
+/// ```
+pub fn repeat(s: &str, count: usize) -> String {
+    s.repeat(count)
+}
+
+/// Check if string starts with specified substring
+/// Similar to JavaScript's String.prototype.startsWith()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::starts_with;
+///
+/// assert!(starts_with("hello world", "hello"));
+/// assert!(!starts_with("hello world", "world"));
+/// assert!(starts_with("test", ""));
+/// ```
+pub fn starts_with(s: &str, search_string: &str) -> bool {
+    s.starts_with(search_string)
+}
+
+/// Check if string ends with specified substring
+/// Similar to JavaScript's String.prototype.endsWith()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::ends_with;
+///
+/// assert!(ends_with("hello world", "world"));
+/// assert!(!ends_with("hello world", "hello"));
+/// assert!(ends_with("test", ""));
+/// ```
+pub fn ends_with(s: &str, search_string: &str) -> bool {
+    s.ends_with(search_string)
+}
+
+/// Check if string includes specified substring
+/// Similar to JavaScript's String.prototype.includes()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::includes;
+///
+/// assert!(includes("hello world", "lo wo"));
+/// assert!(!includes("hello world", "xyz"));
+/// assert!(includes("test", ""));
+/// ```
+pub fn includes(s: &str, search_string: &str) -> bool {
+    s.contains(search_string)
+}
+
+/// Get character at specified index
+/// Similar to JavaScript's String.prototype.charAt()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::char_at;
+///
+/// assert_eq!(char_at("hello", 1), Some('e'));
+/// assert_eq!(char_at("hello", 10), None);
+/// assert_eq!(char_at("🦀", 0), Some('🦀'));
+/// ```
+pub fn char_at(s: &str, index: usize) -> Option<char> {
+    s.chars().nth(index)
+}
+
+/// Get substring from start index to end index
+/// Similar to JavaScript's String.prototype.substring()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::substring;
+///
+/// assert_eq!(substring("hello world", 0, Some(5)), "hello");
+/// assert_eq!(substring("hello world", 6, None), "world");
+/// assert_eq!(substring("hello", 1, Some(4)), "ell");
+/// ```
+pub fn substring(s: &str, start: usize, end: Option<usize>) -> String {
+    let chars: Vec<char> = s.chars().collect();
+    let start_idx = start.min(chars.len());
+    let end_idx = end.unwrap_or(chars.len()).min(chars.len());
+
+    if start_idx >= end_idx {
+        return String::new();
+    }
+
+    chars[start_idx..end_idx].iter().collect()
+}
+
+/// Split string by separator and return vector of strings
+/// Similar to JavaScript's String.prototype.split()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::split;
+///
+/// assert_eq!(split("a,b,c", ","), vec!["a", "b", "c"]);
+/// assert_eq!(split("hello world", " "), vec!["hello", "world"]);
+/// assert_eq!(split("test", ","), vec!["test"]);
+/// ```
+pub fn split(s: &str, separator: &str) -> Vec<String> {
+    if separator.is_empty() {
+        return s.chars().map(|c| c.to_string()).collect();
+    }
+    s.split(separator).map(|s| s.to_string()).collect()
+}
+
+/// Replace all occurrences of search string with replacement
+/// Similar to JavaScript's String.prototype.replaceAll()
+///
+/// # Examples
+///
+/// ```rust
+/// use mudssky_utils::string::replace_all;
+///
+/// assert_eq!(replace_all("hello world hello", "hello", "hi"), "hi world hi");
+/// assert_eq!(replace_all("test", "xyz", "abc"), "test");
+/// ```
+pub fn replace_all(s: &str, search: &str, replacement: &str) -> String {
+    if search.is_empty() {
+        return s.to_string();
+    }
+    s.replace(search, replacement)
+}

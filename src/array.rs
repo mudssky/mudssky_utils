@@ -479,3 +479,281 @@ pub fn shuffle<T: Clone>(array: &[T]) -> Vec<T> {
     items.sort_by_key(|&(hash, _)| hash);
     items.into_iter().map(|(_, item)| item).collect()
 }
+
+/// Find the index of the first element that matches the predicate
+/// Similar to JavaScript's Array.prototype.findIndex()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::find_index;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// assert_eq!(find_index(&vec, |&x| x > 3), Some(3));
+/// assert_eq!(find_index(&vec, |&x| x > 10), None);
+/// ```
+pub fn find_index<T, F>(vec: &[T], predicate: F) -> Option<usize>
+where
+    F: Fn(&T) -> bool,
+{
+    vec.iter().position(predicate)
+}
+
+/// Find the first element that matches the predicate
+/// Similar to JavaScript's Array.prototype.find()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::find;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// assert_eq!(find(&vec, |&x| x > 3), Some(&4));
+/// assert_eq!(find(&vec, |&x| x > 10), None);
+/// ```
+pub fn find<T, F>(vec: &[T], predicate: F) -> Option<&T>
+where
+    F: Fn(&T) -> bool,
+{
+    vec.iter().find(|&x| predicate(x))
+}
+
+/// Check if some elements match the predicate
+/// Similar to JavaScript's Array.prototype.some()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::some;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// assert!(some(&vec, |&x| x > 3));
+/// assert!(!some(&vec, |&x| x > 10));
+/// ```
+pub fn some<T, F>(vec: &[T], predicate: F) -> bool
+where
+    F: Fn(&T) -> bool,
+{
+    vec.iter().any(predicate)
+}
+
+/// Check if every element matches the predicate
+/// Similar to JavaScript's Array.prototype.every()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::every;
+///
+/// let vec = vec![2, 4, 6, 8];
+/// assert!(every(&vec, |&x| x % 2 == 0));
+/// assert!(!every(&vec, |&x| x > 5));
+/// ```
+pub fn every<T, F>(vec: &[T], predicate: F) -> bool
+where
+    F: Fn(&T) -> bool,
+{
+    vec.iter().all(predicate)
+}
+
+/// Filter elements that match the predicate
+/// Similar to JavaScript's Array.prototype.filter()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::filter;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// let filtered = filter(&vec, |&x| x % 2 == 0);
+/// assert_eq!(filtered, vec![2, 4]);
+/// ```
+pub fn filter<T, F>(vec: &[T], predicate: F) -> Vec<T>
+where
+    T: Clone,
+    F: Fn(&T) -> bool,
+{
+    vec.iter().filter(|&x| predicate(x)).cloned().collect()
+}
+
+/// Transform each element using the provided function
+/// Similar to JavaScript's Array.prototype.map()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::map;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// let doubled = map(&vec, |&x| x * 2);
+/// assert_eq!(doubled, vec![2, 4, 6, 8, 10]);
+/// ```
+pub fn map<T, U, F>(vec: &[T], transform: F) -> Vec<U>
+where
+    F: Fn(&T) -> U,
+{
+    vec.iter().map(transform).collect()
+}
+
+/// Reduce the array to a single value
+/// Similar to JavaScript's Array.prototype.reduce()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::reduce;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// let sum = reduce(&vec, 0, |acc, &x| acc + x);
+/// assert_eq!(sum, 15);
+/// ```
+pub fn reduce<T, U, F>(vec: &[T], initial: U, reducer: F) -> U
+where
+    F: Fn(U, &T) -> U,
+{
+    vec.iter().fold(initial, reducer)
+}
+
+/// Check if array includes a specific element
+/// Similar to JavaScript's Array.prototype.includes()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::includes;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// assert!(includes(&vec, &3));
+/// assert!(!includes(&vec, &10));
+/// ```
+pub fn includes<T>(vec: &[T], element: &T) -> bool
+where
+    T: PartialEq,
+{
+    vec.contains(element)
+}
+
+/// Find the index of a specific element
+/// Similar to JavaScript's Array.prototype.indexOf()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::index_of;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// assert_eq!(index_of(&vec, &3), Some(2));
+/// assert_eq!(index_of(&vec, &10), None);
+/// ```
+pub fn index_of<T>(vec: &[T], element: &T) -> Option<usize>
+where
+    T: PartialEq,
+{
+    vec.iter().position(|x| x == element)
+}
+
+/// Join array elements into a string with separator
+/// Similar to JavaScript's Array.prototype.join()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::join;
+///
+/// let vec = vec!["hello", "world", "rust"];
+/// assert_eq!(join(&vec, ", "), "hello, world, rust");
+/// assert_eq!(join(&vec, "-"), "hello-world-rust");
+/// ```
+pub fn join<T>(vec: &[T], separator: &str) -> String
+where
+    T: std::fmt::Display,
+{
+    vec.iter().map(|x| x.to_string()).collect::<Vec<String>>().join(separator)
+}
+
+/// Reverse the array and return a new vector
+/// Similar to JavaScript's Array.prototype.reverse() but non-mutating
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::reverse;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// let reversed = reverse(&vec);
+/// assert_eq!(reversed, vec![5, 4, 3, 2, 1]);
+/// ```
+pub fn reverse<T>(vec: &[T]) -> Vec<T>
+where
+    T: Clone,
+{
+    let mut result = vec.to_vec();
+    result.reverse();
+    result
+}
+
+/// Get a slice of the array from start to end
+/// Similar to JavaScript's Array.prototype.slice()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::slice;
+///
+/// let vec = vec![1, 2, 3, 4, 5];
+/// assert_eq!(slice(&vec, 1, Some(4)), vec![2, 3, 4]);
+/// assert_eq!(slice(&vec, 2, None), vec![3, 4, 5]);
+/// ```
+pub fn slice<T>(vec: &[T], start: usize, end: Option<usize>) -> Vec<T>
+where
+    T: Clone,
+{
+    let start_idx = start.min(vec.len());
+    let end_idx = end.unwrap_or(vec.len()).min(vec.len());
+
+    if start_idx >= end_idx {
+        return Vec::new();
+    }
+
+    vec[start_idx..end_idx].to_vec()
+}
+
+/// Concatenate multiple arrays
+/// Similar to JavaScript's Array.prototype.concat()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::concat;
+///
+/// let vec1 = vec![1, 2];
+/// let vec2 = vec![3, 4];
+/// let vec3 = vec![5, 6];
+/// let result = concat(&[&vec1, &vec2, &vec3]);
+/// assert_eq!(result, vec![1, 2, 3, 4, 5, 6]);
+/// ```
+pub fn concat<T>(arrays: &[&[T]]) -> Vec<T>
+where
+    T: Clone,
+{
+    arrays.iter().flat_map(|&arr| arr.iter().cloned()).collect()
+}
+
+/// Flatten nested arrays by one level
+/// Similar to JavaScript's Array.prototype.flat()
+///
+/// # Examples
+///
+/// ```
+/// use mudssky_utils::array::flat;
+///
+/// let nested = vec![vec![1, 2], vec![3, 4], vec![5]];
+/// let flattened = flat(&nested);
+/// assert_eq!(flattened, vec![1, 2, 3, 4, 5]);
+/// ```
+pub fn flat<T>(nested: &[Vec<T>]) -> Vec<T>
+where
+    T: Clone,
+{
+    nested.iter().flat_map(|vec| vec.iter().cloned()).collect()
+}

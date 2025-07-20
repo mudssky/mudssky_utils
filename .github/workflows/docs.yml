@@ -7,9 +7,17 @@ on:
   pull_request:
     branches: [ main ]
 
+# 添加并发控制，自动取消旧的运行
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# 必须：为部署步骤提供写入权限
+permissions:
+  contents: write
+
 env:
   CARGO_TERM_COLOR: always
-
 jobs:
   docs:
     name: Generate Documentation
@@ -31,7 +39,7 @@ jobs:
         echo '<meta http-equiv="refresh" content="0; url=mudssky_utils">' > target/doc/index.html
     
     - name: Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main'
+      if: github.event_name == 'push'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}

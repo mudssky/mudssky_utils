@@ -5,7 +5,9 @@ const path = require('path');
 const TOML = require('@iarna/toml');
 
 // semantic-release 会将下一个版本号作为环境变量传入
-const newVersion = process.env.SEMANTIC_RELEASE_NEXT_RELEASE_VERSION;
+// const newVersion = process.env.SEMANTIC_RELEASE_NEXT_RELEASE_VERSION;
+// 从命令行参数的第三个元素获取版本号 (第一个是 node, 第二个是脚本路径)
+const newVersion = process.argv[2];
 
 if (!newVersion) {
     console.error('错误：未提供版本号 (SEMANTIC_RELEASE_NEXT_RELEASE_VERSION is not set).');

@@ -15,7 +15,7 @@
     "lint": "cargo clippy --workspace --all-targets -- -D warnings",
     "lint:quick": "cargo clippy -- -D warnings",
     "publish:dryrun": "cargo publish --dry-run",
-    "check:all": "pnpm format:check && pnpm lint && pnpm test && pnpm docs:build && pnpm test:doc "
+    "check:all": "pnpm format:check && pnpm lint && pnpm test && pnpm docs:build && pnpm test:doc"
   },
   "repository": {
     "type": "git",

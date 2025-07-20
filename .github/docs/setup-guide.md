@@ -119,15 +119,20 @@ your-project/
 
 ### 步骤 4: 配置密钥和环境变量
 
-#### 必需的密钥
+#### 配置可信发布 (Trusted Publishing)
 
-在仓库设置的 "Secrets and variables" > "Actions" 中添加：
+现代化的发布方式，无需手动管理 API 令牌：
 
-1. **CARGO_REGISTRY_TOKEN**（用于发布到 crates.io）：
+1. **在 crates.io 配置可信发布**：
    - 登录 [crates.io](https://crates.io/)
-   - 进入 "Account Settings" > "API Tokens"
-   - 创建新的 API token
-   - 将 token 添加到 GitHub Secrets
+   - 进入你的 crate 管理页面
+   - 在 "Publishing" 部分配置 GitHub Actions 可信发布
+   - 添加你的 GitHub 仓库和工作流程信息
+
+2. **GitHub 仓库配置**：
+   - 创建 `release` 环境（Settings > Environments）
+   - 工作流程会自动使用 OIDC 令牌进行身份验证
+   - 无需手动配置 `CARGO_REGISTRY_TOKEN`
 
 #### 可选的密钥
 

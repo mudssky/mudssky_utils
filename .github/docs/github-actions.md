@@ -87,17 +87,18 @@
 - 使用 semantic-release 分析提交信息
 - 自动确定版本号 (patch/minor/major)
 - 创建 GitHub Release
-- 发布到 crates.io (如果有新标签)
+- 使用 OIDC 可信发布到 crates.io (如果有新标签)
+- 配置了 `environment: release` 和必要的权限
+- 使用 `rust-lang/crates-io-auth-action@v1` 进行身份验证
 
 ## 缓存策略
 
-所有工作流程都使用了 GitHub Actions 缓存来提高构建速度：
+所有工作流程都使用了统一的缓存策略来提高构建速度：
 
-- **Cargo Registry 缓存**：`~/.cargo/registry`
-- **Cargo Index 缓存**：`~/.cargo/git`
-- **构建缓存**：`target` 目录
-
-缓存键基于 `Cargo.lock` 文件的哈希值，确保依赖项变更时缓存失效。
+- **统一缓存**：使用 `Swatinem/rust-cache@v2` 统一管理所有缓存
+- **智能缓存**：自动缓存 Cargo registry、index 和构建目录
+- **容错机制**：配置 `cache-on-failure: true` 确保缓存失败时不影响构建
+- **缓存键优化**：基于项目文件自动生成最优缓存键
 
 ## 环境变量
 
@@ -106,7 +107,7 @@
 
 ### 密钥配置
 - `GITHUB_TOKEN`：GitHub 自动提供，用于访问仓库
-- `CARGO_REGISTRY_TOKEN`：用于发布到 crates.io（需要手动配置）
+- **可信发布 (Trusted Publishing)**：使用 OIDC 令牌发布到 crates.io，无需手动配置 API 令牌
 
 ## 状态徽章
 

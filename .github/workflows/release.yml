@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main
-
+permissions:
+  contents: write      # 必须：允许 semantic-release 推送 commit 和 tag
+  issues: write        # 推荐：允许 semantic-release 在失败时创建 issue
+  pull-requests: read  # 推荐：允许 commit-analyzer 分析 PR
 env:
   CARGO_TERM_COLOR: always
 

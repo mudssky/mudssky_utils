@@ -12,9 +12,10 @@
             }
         ],
         [
-            "@semantic-release-cargo/semantic-release-cargo",
+            "@semantic-release/exec",
             {
-                "publish": true
+                "prepareCmd": "node ./scripts/update-cargo-version.js",
+                "publishCmd": "cargo publish --token ${process.env.CARGO_REGISTRY_TOKEN}"
             }
         ],
         [

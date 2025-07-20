@@ -14,7 +14,7 @@
         [
             "@semantic-release-cargo/semantic-release-cargo",
             {
-                "publish": false
+                "publish": true
             }
         ],
         [

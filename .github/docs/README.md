@@ -8,7 +8,7 @@
 详细介绍项目中配置的三个主要工作流程：
 - **CI 工作流程** - 持续集成、测试、代码质量检查
 - **文档工作流程** - API 文档生成和部署
-- **发布工作流程** - 自动版本管理和发布
+- **发布工作流程** - 基于 semantic-release 的自动版本管理和 crates.io 发布
 
 ### [GitHub Actions 配置指南](./setup-guide.md)
 从零开始配置 GitHub Actions 的完整指南：
@@ -16,6 +16,13 @@
 - 逐步配置说明
 - 密钥和环境变量设置
 - 故障排除和最佳实践
+
+### [Semantic Release 配置指南](./semantic-release.md)
+详细介绍 semantic-release 的配置和使用：
+- 提交信息规范和版本策略
+- 自动化发布流程
+- 配置文件说明
+- 开发工具和故障排除
 
 ## 🚀 快速开始
 
@@ -49,8 +56,9 @@ graph LR
     C --> I[📖 API 文档]
     C --> J[🌐 GitHub Pages]
     
-    D --> K[🏷️ 版本标签]
-    D --> L[📦 crates.io]
+    D --> K[🏷️ semantic-release]
+    K --> L[📦 crates.io 发布]
+    K --> M[📝 CHANGELOG 生成]
 ```
 
 ## 📋 检查清单

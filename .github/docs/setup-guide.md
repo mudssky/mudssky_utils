@@ -82,7 +82,7 @@ your-project/
 
 #### 修改 `release.yml`
 
-1. **配置 semantic-release**（如果使用）：
+1. **配置 semantic-release**：
    确保项目根目录有 `.releaserc.json` 文件：
    ```json
    {
@@ -90,7 +90,25 @@ your-project/
      "plugins": [
        "@semantic-release/commit-analyzer",
        "@semantic-release/release-notes-generator",
-       "@semantic-release/changelog",
+       [
+         "@semantic-release/changelog",
+         {
+           "changelogFile": "CHANGELOG.md"
+         }
+       ],
+       [
+         "@semantic-release-cargo/semantic-release-cargo",
+         {
+           "publish": true
+         }
+       ],
+       [
+         "@semantic-release/git",
+         {
+           "assets": ["CHANGELOG.md", "Cargo.toml"],
+           "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+         }
+       ],
        "@semantic-release/github"
      ]
    }
@@ -119,20 +137,24 @@ your-project/
 
 ### 步骤 4: 配置密钥和环境变量
 
-#### 配置可信发布 (Trusted Publishing)
+#### 配置 crates.io 发布
 
-现代化的发布方式，无需手动管理 API 令牌：
-
-1. **在 crates.io 配置可信发布**：
+1. **获取 crates.io API 令牌**：
    - 登录 [crates.io](https://crates.io/)
-   - 进入你的 crate 管理页面
-   - 在 "Publishing" 部分配置 GitHub Actions 可信发布
-   - 添加你的 GitHub 仓库和工作流程信息
+   - 进入 Account Settings
+   - 在 "API Tokens" 部分创建新的 API 令牌
+   - 复制生成的令牌
 
-2. **GitHub 仓库配置**：
-   - 创建 `release` 环境（Settings > Environments）
-   - 工作流程会自动使用 OIDC 令牌进行身份验证
-   - 无需手动配置 `CARGO_REGISTRY_TOKEN`
+2. **配置 GitHub Secrets**：
+   - 进入 GitHub 仓库的 Settings > Secrets and variables > Actions
+   - 点击 "New repository secret"
+   - 名称：`CARGO_REGISTRY_TOKEN`
+   - 值：粘贴从 crates.io 获取的 API 令牌
+
+3. **创建 release 环境**（可选，用于额外安全性）：
+   - 进入 Settings > Environments
+   - 创建名为 `release` 的环境
+   - 配置保护规则（如需要审批等）
 
 #### 可选的密钥
 
@@ -319,9 +341,11 @@ cargo test --doc
 **问题**：crates.io 发布失败
 
 **解决方案**：
-- 验证 `CARGO_REGISTRY_TOKEN` 是否正确
-- 检查 `Cargo.toml` 中的元数据
+- 验证 `CARGO_REGISTRY_TOKEN` 是否正确配置
+- 检查 `Cargo.toml` 中的元数据是否完整
 - 确保版本号符合语义化版本规范
+- 验证 semantic-release-cargo 插件配置
+- 检查提交信息是否符合 Angular 规范以触发发布
 
 ### 调试技巧
 

@@ -77,7 +77,7 @@
 
 **主要功能：**
 - **自动版本管理**：使用 semantic-release 进行版本管理
-- **自动发布**：发布到 crates.io
+- **自动发布**：通过 semantic-release-cargo 插件自动发布到 crates.io
 - **变更日志生成**：自动生成 CHANGELOG
 
 **作业详情：**
@@ -87,9 +87,9 @@
 - 使用 semantic-release 分析提交信息
 - 自动确定版本号 (patch/minor/major)
 - 创建 GitHub Release
-- 使用 OIDC 可信发布到 crates.io (如果有新标签)
+- 通过 semantic-release-cargo 插件自动发布到 crates.io
 - 配置了 `environment: release` 和必要的权限
-- 使用 `rust-lang/crates-io-auth-action@v1` 进行身份验证
+- 使用 `CARGO_REGISTRY_TOKEN` 密钥进行 crates.io 身份验证
 
 ## 缓存策略
 
@@ -107,7 +107,7 @@
 
 ### 密钥配置
 - `GITHUB_TOKEN`：GitHub 自动提供，用于访问仓库
-- **可信发布 (Trusted Publishing)**：使用 OIDC 令牌发布到 crates.io，无需手动配置 API 令牌
+- `CARGO_REGISTRY_TOKEN`：crates.io API 令牌，用于发布包到 crates.io（需要在仓库设置中配置）
 
 ## 状态徽章
 
